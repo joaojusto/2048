@@ -1,94 +1,71 @@
-SWIPE_THRESHOLD = 30
-
-surfaces = []
-
+View = famous.core.View
 Engine = famous.core.Engine
-Surface = famous.core.Surface
-GridLayout = famous.views.GridLayout
-StateModifier = famous.modifiers.StateModifier
+Transform = famous.core.Transform
+Transitionable = famous.transitions.Transitionable
+SpringTransition = famous.transitions.SpringTransition
 
-MouseSync = famous.inputs.MouseSync
-TouchSync = famous.inputs.TouchSync
-ScrollSync = famous.inputs.ScrollSync
-GenericSync = famous.inputs.GenericSync
+views = []
+surfaces = []
+modifiers = []
+
+game = undefined
+gameGrid = undefined
+mainContext = undefined
+touchHandler = undefined
+
+gridSize = window.innerWidth / 6
+
+spring =
+  method: 'spring',
+  period: 1000,
+  dampingRatio: 0.3
 
 Template.gameGrid.rendered = ->
-  mainContext = Engine.createContext();
+  startGame()
+  startFamous()
+  createViews()
 
-  gridSize = window.innerWidth / 6
+startGame = ->
+  game = new Game()
+  game.startGame()
 
-  grid = new GridLayout
-    size: [gridSize, gridSize],
-    dimensions: [4, 4]
+startFamous = ->
+  mainContext = Engine.createContext()
+  registerAnimations()
 
-  grid.sequenceFrom surfaces
+registerAnimations = ->
+  Transitionable.registerMethod 'spring', SpringTransition
 
-  sync = new GenericSync
-      "mouse"  : {},
-      "touch"  : {},
-      "scroll" : {scale : .5}
+createViews = ->
+  createSurfaces()
+  createLayout()
+  touchHandler = new TouchHandler()
+  generateGameSurfaces()
 
-  backgroundSurface = new Surface
-    content: 'Meteor Famous 2048'
-    properties:
-      zIndex: -1,
-      color: 'white',
-      textAlign: 'center',
-      backgroundColor: '#333333'
+createLayout = ->
+  gridCenterModifier = createCenterModifier()
+  gameGrid = createGridLayout(4, 4, gridSize, gridSize)
+  sizeModifier = createSizeModifier(gridSize * 4, gridSize * 4)
 
-  sizeModifier = new StateModifier
-    align: [0.5, 0.5],
-    origin: [0.5, 0.5],
-    size: [gridSize * 4, gridSize * 4]
+  gameGrid.sequenceFrom views
+  mainContext.add(gridCenterModifier).add(sizeModifier).add(gameGrid)
 
-  centerModifier = new StateModifier
-    align: [0.5, 0.5],
-    origin: [0.5, 0.5]
+createSurfaces = ->
+  backgroundSurface = createBackgroundSurface()
+  backgroundCenterModifier = createCenterModifier()
 
+  mainContext.add(backgroundCenterModifier).add(backgroundSurface)
+
+generateGameSurfaces = ->
   for i in [0...16]
-    surface = new Surface
-      size: [gridSize, gridSize],
-      properties:
-        zIndex: 1,
-        borderWidth: '1px',
-        textAlign: 'center',
-        lineHeight: gridSize/16
-        borderColor: 'black',
-        borderStyle: 'solid',
-        backgroundColor: 'white'
+    view = new View()
+    surface = createNumberSurface(gridSize, gridSize)
+    genericModifier = createGenericModifier()
+
+    view.add(genericModifier).add(surface)
+
+    views.push(view)
     surfaces.push(surface)
-    surface.pipe(sync)
+    modifiers.push(genericModifier)
 
-  currentPosition = [0, 0]
-
-  sync.on 'update', (data) ->
-    currentPosition[0] = currentPosition[0] + data.delta[0]
-    currentPosition[1] = currentPosition[1] + data.delta[1]
-
-  sync.on 'end', (data) ->
-    if currentPosition[0] > SWIPE_THRESHOLD
-      console.log 'swipe right'
-    if currentPosition[1] > SWIPE_THRESHOLD
-      console.log 'swipe down'
-    if currentPosition[0] < -SWIPE_THRESHOLD
-      console.log 'swipe left'
-    if currentPosition[1] < -SWIPE_THRESHOLD
-      console.log 'swipe up'
-    currentPosition = [0,0]
-
-  Engine.on 'resize', ->
-    console.log 'resize'
-
-  mainContext.add(centerModifier).add(backgroundSurface)
-  mainContext.add(sizeModifier).add(grid)
-
-  Template.gameGrid.startGame()
-
-Template.gameGrid.startGame = ->
-  number = (Math.random() * 60)
-  position = (Math.random() * 15)
-  position = Math.floor position
-  if number < 10
-    surfaces[position].setContent(4)
-  else
-    surfaces[position].setContent(2)
+    surface.pipe(touchHandler.sync)
