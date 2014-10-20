@@ -16,7 +16,13 @@ class @Board
 
   createGameGrid: ->
     @gameGrid = LayoutFactory.newGrid(4, 4)
-    gridModifier = ModifierFactory.newGameGrid()
 
     @gameGrid.sequenceFrom @views
-    mainContext.add(gridModifier).add(@gameGrid)
+
+  moveUp: ->
+
+  moveDown: ->
+
+  moveLeft: ->
+
+  moveRight: ->
