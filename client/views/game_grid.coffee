@@ -2,6 +2,7 @@ Template.gameGrid.rendered = ->
   game = new Game(4, 4)
   addBackground()
   addGameGrid(game)
+  game.board.moveUp()
 
 addBackground = ->
   background = SurfaceFactory.newBackground()

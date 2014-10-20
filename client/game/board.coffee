@@ -20,9 +20,20 @@ class @Board
     @gameGrid.sequenceFrom @views
 
   moveUp: ->
+    start = column: 0, line: 0
+    end = column: @tiles.length, line: @tiles[0].length
+    @move(start, end)
 
   moveDown: ->
+    @move(0, 0, -1, 0)
 
   moveLeft: ->
+    @move(@tiles.length, 0, 0, -1)
 
   moveRight: ->
+    @move(0, 0, 0 ,1)
+
+  move: (start, end) ->
+    for column in [start.column...end.column]
+      for line in [start.line...end.line]
+        console.log line
