@@ -14,9 +14,9 @@ class @SurfaceFactory
     textAlign: 'center',
     backgroundColor: '#333333'
 
-  @newNumber = (sizeX, sizeY) ->
+  @newNumber = ->
     new Surface
-      size: [sizeX, sizeY],
+      size: [gridSize, gridSize],
       properties: numberProperties
 
   @newBackground = ->

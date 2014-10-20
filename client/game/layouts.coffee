@@ -1,5 +1,5 @@
 class @LayoutFactory
-  @newGrid = (columns, lines, sizeX, sizeY) ->
+  @newGrid = (columns, lines) ->
     new GridLayout
-      size: [sizeX, sizeY],
+      size: [gridSize, gridSize],
       dimensions: [columns, lines]
