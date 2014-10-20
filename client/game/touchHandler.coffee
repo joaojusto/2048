@@ -1,13 +1,7 @@
-SWIPE_THRESHOLD = 30
-
-currentPosition = [0, 0]
-
-MouseSync = famous.inputs.MouseSync
-TouchSync = famous.inputs.TouchSync
-ScrollSync = famous.inputs.ScrollSync
-GenericSync = famous.inputs.GenericSync
-
 class @TouchHandler
+  deltaX = 0
+  deltaY = 0
+  SWIPE_THRESHOLD = 30
 
   constructor: ->
     GenericSync.register
@@ -22,11 +16,8 @@ class @TouchHandler
         scale: .5
 
     @sync.on 'update', (data) ->
-      postionX = currentPosition[0]
-      postionY = currentPosition[1]
-
-      currentPosition[0] = postionX + data.delta[0]
-      currentPosition[1] = postionY + data.delta[1]
+      deltaX = deltaX + data.delta[0]
+      deltaY = detlaY + data.delta[1]
 
     @sync.on 'end', (data) ->
       if currentPosition[0] > SWIPE_THRESHOLD
@@ -37,4 +28,6 @@ class @TouchHandler
         console.log 'swipe left'
       if currentPosition[1] < -SWIPE_THRESHOLD
         console.log 'swipe up'
-      currentPosition = [0,0]
+
+      deltaX = 0
+      deltaY = 0

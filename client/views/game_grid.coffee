@@ -1,9 +1,3 @@
-View = famous.core.View
-Engine = famous.core.Engine
-Transform = famous.core.Transform
-Transitionable = famous.transitions.Transitionable
-SpringTransition = famous.transitions.SpringTransition
-
 views = []
 surfaces = []
 modifiers = []
@@ -43,29 +37,29 @@ createViews = ->
   generateGameSurfaces()
 
 createLayout = ->
-  gridCenterModifier = createCenterModifier()
-  gameGrid = createGridLayout(4, 4, gridSize, gridSize)
-  sizeModifier = createSizeModifier(gridSize * 4, gridSize * 4)
+  gridCenterModifier = ModifierFactory.newCenter()
+  gameGrid = LayoutFactory.newGrid(4, 4, gridSize, gridSize)
+  sizeModifier = ModifierFactory.newSize(gridSize * 4, gridSize * 4)
 
   gameGrid.sequenceFrom views
   mainContext.add(gridCenterModifier).add(sizeModifier).add(gameGrid)
 
 createSurfaces = ->
-  backgroundSurface = createBackgroundSurface()
-  backgroundCenterModifier = createCenterModifier()
+  backgroundSurface = SurfaceFactory.newBackground()
+  backgroundCenterModifier = ModifierFactory.newCenter()
 
   mainContext.add(backgroundCenterModifier).add(backgroundSurface)
 
 generateGameSurfaces = ->
   for i in [0...16]
     view = new View()
-    surface = createNumberSurface(gridSize, gridSize)
-    genericModifier = createGenericModifier()
+    surface = SurfaceFactory.newNumber(gridSize, gridSize)
+    emptyModifier = ModifierFactory.newEmpty()
 
-    view.add(genericModifier).add(surface)
+    view.add(emptyModifier).add(surface)
 
     views.push(view)
     surfaces.push(surface)
-    modifiers.push(genericModifier)
+    modifiers.push(emptyModifier)
 
     surface.pipe(touchHandler.sync)

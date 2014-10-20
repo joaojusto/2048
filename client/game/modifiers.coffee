@@ -1,13 +1,12 @@
-StateModifier = famous.modifiers.StateModifier
+class @ModifierFactory
+  @newSize = (sizeX, sizeY) ->
+    return new StateModifier
+      size: [sizeX, sizeY]
 
-@createSizeModifier = (sizeX, sizeY) ->
-  return new StateModifier
-    size: [sizeX, sizeY]
+  @newCenter = ->
+    return new StateModifier
+      align: [0.5, 0.5],
+      origin: [0.5, 0.5]
 
-@createCenterModifier = ->
-  return new StateModifier
-    align: [0.5, 0.5],
-    origin: [0.5, 0.5]
-
-@createGenericModifier = ->
-  return new StateModifier
+  @newEmpty = ->
+    return new StateModifier
