@@ -20,20 +20,23 @@ class @Board
     @gameGrid.sequenceFrom @views
 
   moveUp: ->
-    start = column: 0, line: 0
+    start = column: 0, line: 1
     end = column: @tiles.length, line: @tiles[0].length
-    @move(start, end)
+    direction = x: 0, y: 1
+    @move(start, end, direction)
 
-  moveDown: ->
-    @move(0, 0, -1, 0)
-
-  moveLeft: ->
-    @move(@tiles.length, 0, 0, -1)
-
-  moveRight: ->
-    @move(0, 0, 0 ,1)
-
-  move: (start, end) ->
+  move: (start, end, direction) ->
     for column in [start.column...end.column]
       for line in [start.line...end.line]
-        console.log line
+        targetTile = @getTile(column - direction.x, line - direction.y)
+        sourceTile = @getTile(column, line)
+        if targetTile.value == ''
+          @swapTiles(targetTile, sourceTile)
+
+  getTile: (column, line) ->
+    @tiles[line][column]
+
+  swapTiles: (oldTile, newTile) ->
+    value = newTile.value
+    newTile.set(oldTile.value)
+    oldTile.set(value)
