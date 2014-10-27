@@ -3,6 +3,8 @@ Template.gameGrid.rendered = ->
   addBackground()
   addGameGrid(game)
 
+  game.start()
+
 addBackground = ->
   background = SurfaceFactory.newBackground()
   centerModifier = ModifierFactory.newCenter()

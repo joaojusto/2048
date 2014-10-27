@@ -7,7 +7,6 @@
 
 @MouseSync = famous.inputs.MouseSync
 @TouchSync = famous.inputs.TouchSync
-@ScrollSync = famous.inputs.ScrollSync
 @GenericSync = famous.inputs.GenericSync
 
 @StateModifier = famous.modifiers.StateModifier
