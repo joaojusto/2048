@@ -1,9 +1,15 @@
 class @SurfaceFactory
+  if window.innerWidth < window.innnerHeight
+    window.gridSize = window.innerWidth / 6
+  else
+    window.gridSize = window.innerHeight / 6
+
   numberProperties =
     zIndex: 1,
     borderWidth: '1px',
     textAlign: 'center',
-    lineHeight: (window.innerWidth / 6) / 16
+    fontSize: window.gridSize / 4 + 'px',
+    lineHeight: window.gridSize / 64
     borderColor: 'black',
     borderStyle: 'solid',
     backgroundColor: 'white'

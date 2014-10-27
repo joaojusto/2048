@@ -1,42 +1,54 @@
 class @Board
   constructor: (columns, lines) ->
     @tiles = []
-    @views = []
+    @views = [columns * lines]
 
-    @createEmptyTiles(columns, lines)
-    @createGameGrid()
+    @lines = lines
+    @columns = columns
 
-  createEmptyTiles: (columns, lines) ->
-    for column in [0...columns]
+    @_createEmptyTiles()
+    @_createGameGrid()
+
+    @changed = false
+    @freeTiles = true
+
+  _createEmptyTiles: () ->
+    for column in [0...@columns]
       @tiles.push []
-      for line in [0...lines]
+      for line in [0...@lines]
         tile = new Tile('', column, line)
         @tiles[column].push tile
-        @views.push tile.view
+        @views[(line * 3) + line + column] = tile.view
 
-  createGameGrid: ->
+  _createGameGrid: ->
     @gameGrid = LayoutFactory.newGrid(4, 4)
 
     @gameGrid.sequenceFrom @views
 
-  moveUp: ->
-    start = column: 0, line: 1
-    end = column: @tiles.length, line: @tiles[0].length
-    direction = x: 0, y: 1
-    @move(start, end, direction)
+  get: (column, line) ->
+    if column >= 0 && line >= 0
+      if column < @tiles.length && line < @tiles[0].length
+        @tiles[column][line]
 
-  move: (start, end, direction) ->
-    for column in [start.column...end.column]
-      for line in [start.line...end.line]
-        targetTile = @getTile(column - direction.x, line - direction.y)
-        sourceTile = @getTile(column, line)
-        if targetTile.value == ''
-          @swapTiles(targetTile, sourceTile)
+  swap: (tile0, tile1) ->
+    temp = tile1.value
+    tile1.set(tile0.value)
+    tile0.set(temp)
+    @changed = true
 
-  getTile: (column, line) ->
-    @tiles[line][column]
+  join: (tile0, tile1) ->
+    tile0.set(tile0.value + ' + ' + tile1.value)
+    tile1.set('')
+    @changed = true
 
-  swapTiles: (oldTile, newTile) ->
-    value = newTile.value
-    newTile.set(oldTile.value)
-    oldTile.set(value)
+  add: (column, line, value) ->
+    tile = @get(column, line)
+    tile.set(value)
+
+  addOnEmpty: (column, line, value) ->
+    tile = @get(column, line)
+    if tile && tile.value == ''
+      tile.set(value)
+      true
+    else
+      false
