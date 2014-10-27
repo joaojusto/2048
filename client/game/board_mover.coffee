@@ -33,6 +33,7 @@ class @BoardMover
     @_do()
 
   _do: ->
+    @_resetEmptyTilesCount()
     for column in [start.column...end.column]
       for line in [start.line...end.line]
         tile = @board.get(column, line)
@@ -46,11 +47,15 @@ class @BoardMover
         tile = @board.get(column, line)
         if @_hasOperations(tile)
           @_performOperations(tile)
+        if @_isEmpty(tile)
+          @_incrementEmptyTilesCount()
+    if @board.emptyTilesCount == 0
+      @board.freeTiles = false
 
   _moveTiles: (current) ->
     target = @_previousTileOf(current)
 
-    if @_isEmpty(target)
+    if @_isEmpty(target) && !@_areBothEmpty(current, target)
       @board.swap(current, target)
       @_moveTiles(target)
 
@@ -95,3 +100,9 @@ class @BoardMover
 
   _performOperations: (tile) ->
     tile.set(parseInt(tile.value) * 2)
+
+  _incrementEmptyTilesCount: ->
+    @board.emptyTilesCount++
+
+  _resetEmptyTilesCount: ->
+    @board.emptyTilesCount = 0

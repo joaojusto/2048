@@ -11,6 +11,7 @@ class @Board
 
     @changed = false
     @freeTiles = true
+    @emptyTilesCount = 0
 
   _createEmptyTiles: () ->
     for column in [0...@columns]

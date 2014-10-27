@@ -16,11 +16,10 @@ class @Game
     if direction == 'right'
       @boardMover.right()
 
-    console.log @board.changed
     if @board.changed && @board.freeTiles
       @_insertNewTile()
       @board.changed = false
-    else if !@board.changed && !@boardfreeTiles
+    else if !@board.changed && !@board.freeTiles
       console.log 'gameOver'
 
   start: ->
