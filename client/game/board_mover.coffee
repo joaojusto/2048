@@ -57,7 +57,6 @@ class @BoardMover
 
     if @_isEmpty(target) && !@_areBothEmpty(current, target)
       @board.swap(current, target)
-      @_animate(target)
       @_moveTiles(target)
 
     else if target && !@_areBothEmpty(current, target)
@@ -66,16 +65,17 @@ class @BoardMover
   _joinTiles: (current, target) ->
     if @_sameValue(current, target)
       @board.join(target, current)
-      @_animate(target)
       @_moveTiles(target)
 
     @_moveTiles(target)
 
   _animate: (tile) ->
-    amountX = gridSize * direction.x
-    amountY = gridSize * direction.y
-    tile.modifier.setTransform Transform.translate(amountX, amountY, 0), spring
-    tile.modifier.setTransform Transform.translate(0, 0, 0), spring
+    if !@_isEmpty(tile)
+      amountX = gridSize * direction.x
+      amountY = gridSize * direction.y
+      tile.modifier.halt()
+      tile.modifier.setTransform Transform.translate(-direction.x * 10, -direction.y * 10, 0), spring
+      tile.modifier.setTransform Transform.translate(0, 0, 0), spring
 
   _nextTileOf: (current) ->
     if current

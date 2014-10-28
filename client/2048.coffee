@@ -1,7 +1,7 @@
 window.spring =
   method: 'spring',
-  period: 500,
-  dampingRatio: 0.6
+  period: 300,
+  dampingRatio: 0.5
 
 Meteor.startup ->
   window.mainContext = Engine.createContext()

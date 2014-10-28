@@ -5,7 +5,7 @@ class @SurfaceFactory
     window.gridSize = window.innerHeight / 6
 
   numberProperties =
-    zIndex: 1,
+    zIndex: 0,
     borderWidth: '1px',
     textAlign: 'center',
     fontSize: window.gridSize / 4 + 'px',
@@ -15,7 +15,7 @@ class @SurfaceFactory
     backgroundColor: 'white'
 
   backgroundProperties =
-    zIndex: -1,
+    zIndex: -1000,
     color: 'white',
     textAlign: 'center',
     backgroundColor: '#333333'
