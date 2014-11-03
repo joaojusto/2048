@@ -17,11 +17,13 @@ class TileAnimator
     modifier = tile.modifier
     modifier.halt()
     @_scale modifier, 0.75, 0.75, 1
+    @_opacity modifier, 1
 
   out: (tile) ->
     modifier = tile.modifier
     modifier.halt()
     @_scale modifier, 1, 1, 1
+    @_opacity modifier, 1
 
   _translate: (modifier, x, y ,z) ->
     modifier.setTransform Transform.translate(x, y, z), spring
