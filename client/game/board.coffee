@@ -20,6 +20,8 @@ class @Board
         tile = new Tile('', column, line)
         @tiles[column].push tile
         @views[(line * 3) + line + column] = tile.view
+        animator.apear(tile)
+
 
   _createGameGrid: ->
     @gameGrid = LayoutFactory.newGrid(4, 4)
@@ -32,9 +34,15 @@ class @Board
         @tiles[column][line]
 
   swap: (tile0, tile1) ->
+    amountX = gridSize * (tile0.column - tile1.column)
+    amountY = gridSize * (tile0.line - tile1.line)
     temp = tile1.value
     tile1.set(tile0.value)
     tile0.set(temp)
+    tile0.modifier.setTransform Transform.translate -amountX, -amountY, 1
+    tile1.modifier.setTransform Transform.translate amountX, amountY, 1
+
+    @_swapAnimate tile0, tile1
     @changed = true
 
   join: (tile0, tile1) ->
@@ -50,6 +58,13 @@ class @Board
     tile = @get(column, line)
     if tile && tile.value == ''
       tile.set(value)
+      tile.modifier.setOpacity(0)
+      tile.modifier.setTransform Transform.scale(0, 0, 1)
+      animator.apear(tile)
       true
     else
       false
+
+  _swapAnimate: (tile0, tile1) ->
+    animator.move tile0, 0, 0
+    animator.move tile1, 0, 0

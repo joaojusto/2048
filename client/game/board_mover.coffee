@@ -73,9 +73,7 @@ class @BoardMover
     if !@_isEmpty(tile)
       amountX = gridSize * direction.x
       amountY = gridSize * direction.y
-      tile.modifier.halt()
-      tile.modifier.setTransform Transform.translate(-direction.x * 10, -direction.y * 10, 0), spring
-      tile.modifier.setTransform Transform.translate(0, 0, 0), spring
+      animator.move tile, -amountX, -amountY
 
   _nextTileOf: (current) ->
     if current

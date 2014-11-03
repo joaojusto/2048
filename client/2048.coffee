@@ -1,6 +1,6 @@
 window.spring =
   method: 'spring',
-  period: 300,
+  period: 1000,
   dampingRatio: 0.5
 
 Meteor.startup ->
