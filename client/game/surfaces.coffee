@@ -6,23 +6,21 @@ class @SurfaceFactory
 
   numberProperties =
     zIndex: 1,
-    borderWidth: '1px',
+    borderRadius: '10px'
     textAlign: 'center',
     fontSize: window.gridSize / 4 + 'px',
     lineHeight: window.gridSize / 64
-    borderColor: 'black',
-    borderStyle: 'solid',
-    backgroundColor: 'white'
+    backgroundColor: '#EEF2E8'
 
   backgroundProperties =
-    zIndex: -1,
+    zIndex: 0,
     color: 'white',
     textAlign: 'center',
-    backgroundColor: '#333333'
+    backgroundColor: '#383B32'
 
   @newNumber = ->
     new Surface
-      size: [gridSize, gridSize],
+      size: [gridSize - 10, gridSize - 10],
       properties: numberProperties
 
   @newBackground = ->
