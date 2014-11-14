@@ -1,3 +1,5 @@
+color = ['#388099', '#FCBF6B', '#149C68']
+
 class @Tile
   constructor: (value, column, line) ->
     @view = new View()
@@ -22,3 +24,14 @@ class @Tile
   set: (value) ->
     @value = value
     @surface.setContent(value)
+    if value
+      @changeColor(@_randomColor())
+    else
+      @changeColor('#EEF2E8')
+
+  changeColor: (color) ->
+    @.surface.properties.backgroundColor = color
+    @.surface.setProperties()
+
+  _randomColor: ->
+    color[Math.floor(Math.random() * color.length)]

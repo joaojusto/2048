@@ -69,12 +69,6 @@ class @BoardMover
 
     @_moveTiles(target)
 
-  _animate: (tile) ->
-    if !@_isEmpty(tile)
-      amountX = gridSize * direction.x
-      amountY = gridSize * direction.y
-      animator.move tile, -amountX, -amountY
-
   _nextTileOf: (current) ->
     if current
       nextTileLine = current.line + direction.y

@@ -14,14 +14,20 @@ class @Board
     @emptyTilesCount = 0
 
   _createEmptyTiles: () ->
+    delay = 300
     for column in [0...@columns]
       @tiles.push []
       for line in [0...@lines]
         tile = new Tile('', column, line)
         @tiles[column].push tile
         @views[(line * 3) + line + column] = tile.view
-        animator.apear(tile)
+        @_tileApear(tile, delay)
+        delay += 100
 
+  _tileApear: (tile, delay) ->
+    setTimeout ->
+      animator.apear(tile)
+    , delay
 
   _createGameGrid: ->
     @gameGrid = LayoutFactory.newGrid(4, 4)
@@ -41,12 +47,13 @@ class @Board
     tile0.set(temp)
     tile0.modifier.setTransform Transform.translate -amountX, -amountY, 1
     tile1.modifier.setTransform Transform.translate amountX, amountY, 1
-
-    @_swapAnimate tile0, tile1
+    animator.move tile0, 0, 0
+    animator.move tile1, 0, 0
     @changed = true
 
   join: (tile0, tile1) ->
     tile0.set(tile0.value + ' + ' + tile1.value)
+    animator.scale tile0, 1.30, 1.30
     tile1.set('')
     @changed = true
 
@@ -64,7 +71,3 @@ class @Board
       true
     else
       false
-
-  _swapAnimate: (tile0, tile1) ->
-    animator.move tile0, 0, 0
-    animator.move tile1, 0, 0

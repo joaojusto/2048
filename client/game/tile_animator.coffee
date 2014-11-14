@@ -1,8 +1,7 @@
 class TileAnimator
   apear: (tile) ->
     modifier = tile.modifier
-    modifier.halt()
-    @_scale modifier, 1, 1, 1
+    @_scaleSpring modifier, 1, 1, 1
     @_opacity modifier, 1
 
   move: (tile, x, y) ->
@@ -15,20 +14,26 @@ class TileAnimator
 
   over: (tile) ->
     modifier = tile.modifier
-    modifier.halt()
     @_scale modifier, 0.75, 0.75, 1
     @_opacity modifier, 1
 
   out: (tile) ->
     modifier = tile.modifier
-    modifier.halt()
     @_scale modifier, 1, 1, 1
     @_opacity modifier, 1
+
+  scale: (tile, value) ->
+    modifier = tile.modifier
+    @_scale modifier, value, value, 1
+    @_scale modifier, 1, 1, 1
 
   _translate: (modifier, x, y ,z) ->
     modifier.setTransform Transform.translate(x, y, z), spring
 
   _scale: (modifier, x, y, z) ->
+    modifier.setTransform Transform.scale(x, y, z), 50
+
+  _scaleSpring: (modifier, x, y, z) ->
     modifier.setTransform Transform.scale(x, y, z), spring
 
   _opacity: (modifier, value) ->
