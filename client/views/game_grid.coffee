@@ -1,5 +1,5 @@
 Template.gameGrid.rendered = ->
-  game = new Game(4, 4)
+  window.game = new Game(4, 4)
   addBackground()
   addGameGrid(game)
 
@@ -13,5 +13,4 @@ addBackground = ->
 
 addGameGrid = (game) ->
   gridModifier = ModifierFactory.newGameGrid()
-
   mainContext.add(gridModifier).add(game.board.gameGrid)

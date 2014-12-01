@@ -2,6 +2,7 @@ class @BoardMover
   end = column: 0, line: 0
   start = column: 0, line: 0
   direction = x: 0, y: 0
+  delay = 0
 
   constructor: (board) ->
     @board = board
@@ -57,7 +58,9 @@ class @BoardMover
 
     if @_isEmpty(target) && !@_areBothEmpty(current, target)
       @board.swap(current, target)
-      @_moveTiles(target)
+      setTimeout =>
+        @_moveTiles(target)
+      , 5000
 
     else if target && !@_areBothEmpty(current, target)
       @_joinTiles(current, target)
@@ -65,7 +68,9 @@ class @BoardMover
   _joinTiles: (current, target) ->
     if @_sameValue(current, target)
       @board.join(target, current)
-      @_moveTiles(target)
+      setTimeout =>
+        @_moveTiles(target)
+      , 5000
 
     @_moveTiles(target)
 
