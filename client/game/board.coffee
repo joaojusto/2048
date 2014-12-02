@@ -45,10 +45,10 @@ class @Board
     temp = tile1.value
     tile1.set(tile0.value)
     tile0.set(temp)
-    tile0.modifier.setTransform Transform.translate -amountX, -amountY, 1
-    tile1.modifier.setTransform Transform.translate amountX, amountY, 1
-    animator.move tile0, 0, 0
-    animator.move tile1, 0, 0
+    # tile0.modifier.setTransform Transform.translate -amountX, -amountY, 1
+    # tile1.modifier.setTransform Transform.translate amountX, amountY, 1
+    # animator.move tile0, 0, 0
+    # animator.move tile1, 0, 0
     @changed = true
 
   join: (tile0, tile1) ->

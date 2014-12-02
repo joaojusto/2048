@@ -10,13 +10,13 @@ class @BoardMover
     @columns = board.columns
 
   up: ->
-    start = column: 0, line: 0
+    start = column: 1, line: 1
     end = column: @columns, line: @lines
     direction = x: 0, y: 1
     @_do()
 
   down: ->
-    start = column: 0, line: @lines - 1
+    start = column: 1, line: @lines - 1
     end = column: @columns, line: -1
     direction = x: 0, y: - 1
     @_do()
@@ -28,68 +28,52 @@ class @BoardMover
     @_do()
 
   left: ->
-    start = column: 0, line: 0
+    start = column: 1, line: 1
     end = column: @columns, line: @lines
     direction = x: 1, y: 0
     @_do()
 
   _do: ->
     @_resetEmptyTilesCount()
-    for column in [start.column...end.column]
-      for line in [start.line...end.line]
-        tile = @board.get(column, line)
-        @_moveTiles(tile)
+    @board.tiles.forEach @_moveColumn
 
-    @_checkOperations()
+  _moveColumn: (column) =>
+    if @_columnIsMovable(column)
+      @_moveTilesInColumn(column)
+      # @_joinTilesInColumn(column)
+    else
+      # @_joinTilesInColumn(column)
 
-  _checkOperations: ->
-    for column in [0...@columns]
-      for line in [0...@lines]
-        tile = @board.get(column, line)
-        if @_hasOperations(tile)
-          @_performOperations(tile)
-        if @_isEmpty(tile)
-          @_incrementEmptyTilesCount()
-    if @board.emptyTilesCount == 0
-      @board.freeTiles = false
+  _columnIsMovable: (column) =>
+    column.some @_notEmpty
 
-  _moveTiles: (current) ->
-    target = @_previousTileOf(current)
+  _moveTilesInColumn: (column) =>
+    tilesToMove = column.filter @_notEmpty
+    column.sort (a, b) =>
+      console.log a
+      console.log b
 
-    if @_isEmpty(target) && !@_areBothEmpty(current, target)
-      @board.swap(current, target)
-      setTimeout =>
-        @_moveTiles(target)
-      , 5000
-
-    else if target && !@_areBothEmpty(current, target)
-      @_joinTiles(current, target)
-
-  _joinTiles: (current, target) ->
-    if @_sameValue(current, target)
-      @board.join(target, current)
-      setTimeout =>
-        @_moveTiles(target)
-      , 5000
-
-    @_moveTiles(target)
+  _moveTile: (tile) =>
+    target = @_previousTileOf tile
+    if @_isEmpty target
+      @board.swap(tile, target)
+      # @_moveTile(target)
 
   _nextTileOf: (current) ->
-    if current
-      nextTileLine = current.line + direction.y
-      nextTileColumn = current.column + direction.x
-
-      @board.get(nextTileColumn, nextTileLine)
+    nextTileLine = current.line + direction.y
+    nextTileColumn = current.column + direction.x
+    @board.get(nextTileColumn, nextTileLine)
 
   _previousTileOf: (current) ->
-    if current
-      previousTileLine = current.line - direction.y
-      previousTileColumn = current.column - direction.x
+    previousTileLine = current.line - direction.y
+    previousTileColumn = current.column - direction.x
+    @board.get(previousTileColumn, previousTileLine)
 
-      @board.get(previousTileColumn, previousTileLine)
+  _isEmpty: (tile, index, array) ->
+    return tile && tile.value == ""
 
-  _isEmpty: (tile) ->
-    return tile && tile.value == ''
+  _notEmpty: (tile, index, array) ->
+    return tile && tile.value != ""
 
   _areBothEmpty: (current, target) ->
     if @_isEmpty(current)

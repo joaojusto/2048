@@ -24,10 +24,6 @@ class @Tile
   set: (value) ->
     @value = value
     @surface.setContent(value)
-    if value
-      @changeColor(@_randomColor())
-    else
-      @changeColor('#EEF2E8')
 
   changeColor: (color) ->
     @.surface.properties.backgroundColor = color
