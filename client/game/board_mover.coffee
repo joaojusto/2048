@@ -1,72 +1,51 @@
 class @BoardMover
-  end = column: 0, line: 0
-  start = column: 0, line: 0
-  direction = x: 0, y: 0
-  delay = 0
-
   constructor: (board) ->
     @board = board
     @lines = board.lines
     @columns = board.columns
+    @direction = new Direction()
 
-  up: ->
-    start = column: 1, line: 1
-    end = column: @columns, line: @lines
-    direction = x: 0, y: 1
-    @_do()
-
-  down: ->
-    start = column: 1, line: @lines - 1
-    end = column: @columns, line: -1
-    direction = x: 0, y: - 1
-    @_do()
-
-  right: ->
-    start = column: @columns - 1, line: 0
-    end = column: -1, line: @lines
-    direction = x: - 1, y: 0
-    @_do()
-
-  left: ->
-    start = column: 1, line: 1
-    end = column: @columns, line: @lines
-    direction = x: 1, y: 0
-    @_do()
-
-  _do: ->
+  move: ->
     @_resetEmptyTilesCount()
-    @board.tiles.forEach @_moveColumn
+    if @direction.x < 0
+      boardColumns = @board.tiles.reverse()
+    else
+      boardColumns = @board.tiles
+    boardColumns.forEach @_moveColumn
 
   _moveColumn: (column) =>
-    if @_columnIsMovable(column)
-      @_moveTilesInColumn(column)
+    targetColumn = column
+    if @direction.y < 0
+      targetColumn = column.reverse()
+
+    if @_columnIsMovable(targetColumn)
+      @_moveTilesInColumn(targetColumn)
       # @_joinTilesInColumn(column)
     else
       # @_joinTilesInColumn(column)
 
-  _columnIsMovable: (column) =>
+  _columnIsMovable: (column) ->
     column.some @_notEmpty
 
-  _moveTilesInColumn: (column) =>
+  _moveTilesInColumn: (column) ->
     tilesToMove = column.filter @_notEmpty
-    column.sort (a, b) =>
-      console.log a
-      console.log b
+    tilesToMove.forEach @_moveTile
 
   _moveTile: (tile) =>
     target = @_previousTileOf tile
+    console.log target
     if @_isEmpty target
       @board.swap(tile, target)
-      # @_moveTile(target)
+    #@_moveTile(target)
 
   _nextTileOf: (current) ->
-    nextTileLine = current.line + direction.y
-    nextTileColumn = current.column + direction.x
+    nextTileLine = current.line + @direction.y
+    nextTileColumn = current.column + @direction.x
     @board.get(nextTileColumn, nextTileLine)
 
   _previousTileOf: (current) ->
-    previousTileLine = current.line - direction.y
-    previousTileColumn = current.column - direction.x
+    previousTileLine = current.line - @direction.y
+    previousTileColumn = current.column - @direction.x
     @board.get(previousTileColumn, previousTileLine)
 
   _isEmpty: (tile, index, array) ->

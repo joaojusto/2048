@@ -8,13 +8,15 @@ class @Game
 
   onSwipe: (direction) ->
     if direction == 'up'
-      @boardMover.up()
+      @boardMover.direction.up()
     if direction == 'down'
-      @boardMover.down()
+      @boardMover.direction.down()
     if direction == 'left'
-      @boardMover.left()
+      @boardMover.direction.left()
     if direction == 'right'
-      @boardMover.right()
+      @boardMover.direction.right()
+
+    @boardMover.move()
 
     if @board.changed && @board.freeTiles
       @_insertNewTile()
