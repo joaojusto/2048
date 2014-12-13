@@ -32,15 +32,18 @@ class @BoardMover
     tilesToMove.forEach @_moveTile
 
   _moveTile: (tile) =>
-    target = @_previousTileOf tile
+    target = @_nextTileOf tile
     console.log target
     if @_isEmpty target
       @board.swap(tile, target)
     #@_moveTile(target)
 
   _nextTileOf: (current) ->
+    console.log current.line
     nextTileLine = current.line + @direction.y
     nextTileColumn = current.column + @direction.x
+    console.log nextTileLine
+    console.log nextTileColumn
     @board.get(nextTileColumn, nextTileLine)
 
   _previousTileOf: (current) ->

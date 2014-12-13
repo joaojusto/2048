@@ -19,7 +19,7 @@ class @Game
     @boardMover.move()
 
     if @board.changed && @board.freeTiles
-      @_insertNewTile()
+      #@_insertNewTile()
       @board.changed = false
     else if !@board.changed && !@board.freeTiles
       console.log 'gameOver'
